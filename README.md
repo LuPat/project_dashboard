@@ -41,5 +41,9 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
+Malte Bonart with the heroku-flask starter : 
+
+https://github.com/bonartm/heroku-flask
+
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/LuPat/project_dashboard/blob/f217a207fbe95c536a2d7baa5ef0a6e6c0ede928/LICENSE)
