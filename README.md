@@ -1,2 +1,2 @@
 # project_dashboard
-Plotly/Dash Dashboard to explore car build data 
+Interactive Dashboard with plotly-dash to explore car build data 
