@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/LuPat/project_dashboard/.github/workflows/pylint.yml/badge.svg)](https://github.com/Lupat/project_dashboard/.github)
+[![pylint](https://github.com/LuPat/project_dashboard/actions/workflows/pylint.yml/badge.svg)](https://github.com/LuPat/project_dashboard/actions/workflows/pylint.yml)
 
 
 Final Project of Spiced Academy Data Science Boot Camp
