@@ -1,4 +1,4 @@
-![pylint](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![pylint](https://github.com/github/docs/actions/workflows/pylint.yml/badge.svg)
 
 
 Final Project of Spiced Academy Data Science Boot Camp
