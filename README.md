@@ -2,17 +2,21 @@
 [![Format python code](https://github.com/LuPat/project_dashboard/actions/workflows/autopep.yml/badge.svg)](https://github.com/LuPat/project_dashboard/actions/workflows/autopep.yml)
 
 
-Final Project of Spiced Academy Data Science Boot Camp
-Interactive Dashboard with plotly-dash to explore car build data 
-
 Heroku Link :
 https://fast-wildwood-39902.herokuapp.com/ | https://git.heroku.com/fast-wildwood-39902.git
 
+heroku-flask starter : 
+https://github.com/bonartm/heroku-flask
 
 
-# Foobar
+# DashBoard
 
-Foobar is a Python library for dealing with word pluralization.
+Interactive Dashboard with created with plotly-dash to explore car build data. 
+The Dashboard is online deployed on a heroku dyno and under following link available :
+
+https://fast-wildwood-39902.herokuapp.com/
+
+This is the Final Project of the Discrete-Dill Cohorte of the Data Science Boot Camp in Cologne @Spiced Academy
 
 ## Installation
 
