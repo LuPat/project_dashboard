@@ -20,10 +20,10 @@ This is the Final Project of the Discrete-Dill Cohorte of the Data Science Boot 
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+You can clone the repository to your loacl machine : 
 
 ```bash
-pip install foobar
+git clone https://github.com/LuPat/project_dashboard.git
 ```
 
 ## Usage
