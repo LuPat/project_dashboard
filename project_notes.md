@@ -31,12 +31,15 @@ Udemy : https://justintodata.com
 - Dash Bootstrap Components 
 - Search for a Dashboard template :
   Theme : https://bootswatch.com/slate/
-
+- Base Design and Tables :
+  https://www.tutorialspoint.com/python_web_development_libraries/python_web_development_libraries_dash_framework.htm
 - Botstrap Grid as 12 Columns and 5 responsive tears
   https://dash-bootstrap-components.opensource.faculty.ai/docs/components/layout
 - Style Sheet Solar 
   https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/solar/bootstrap.min.css
 - https://getbootstrap.com
+- Dash HTML Template : 
+  https://github.com/masdeseiscaracteres/dash-html-template
 
 
 
@@ -44,6 +47,9 @@ Udemy : https://justintodata.com
 
 Heroku Dashboard : 
 https://dashboard.heroku.com/apps/fast-wildwood-39902
+
+How to : 
+https://towardsdatascience.com/deploying-your-dash-app-to-heroku-the-magical-guide-39bd6a0c586c
 
 
 
