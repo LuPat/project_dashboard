@@ -5,8 +5,16 @@ Udemy : https://justintodata.com
 ## Data : 
 
 - add year or change column date to date time after input 
+
 - DataTable component 
   https://dash.plotly.com/datatable
+
+- Create automated requirements.txt : 
+  pip install pipreqs
+
+  pipreqs /path/to/project
+
+  https://stackoverflow.com/questions/60391026/list-all-the-python-modules-imported-by-a-project/61628623#61628623
 
 ## Graphs :
 
@@ -20,8 +28,10 @@ Udemy : https://justintodata.com
 
 ## Design : 
 
-- Dash Bootstrap Components
-- Search for a Dashboard template
+- Dash Bootstrap Components 
+- Search for a Dashboard template :
+  Theme : https://bootswatch.com/slate/
+
 - Botstrap Grid as 12 Columns and 5 responsive tears
   https://dash-bootstrap-components.opensource.faculty.ai/docs/components/layout
 - Style Sheet Solar 
@@ -29,6 +39,11 @@ Udemy : https://justintodata.com
 - https://getbootstrap.com
 
 
+
+## Deploy :
+
+Heroku Dashboard : 
+https://dashboard.heroku.com/apps/fast-wildwood-39902
 
 
 
