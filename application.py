@@ -22,16 +22,35 @@ from dash.dependencies import Input, Output
 cars = pd.read_csv('./data/car_builds_long_format.csv', index_col=0, parse_dates=True)
 cars['date'] = pd.to_datetime(cars['date'])
 cars.index = cars['date']
-print(cars.info())
 
 # define variables with unique names for customer, plant, country and region
 customer = [{'label':i, 'value': i} for i in cars['customer'].unique()]
 plant = [{'label':i, 'value': i} for i in cars['plant'].unique()]
 country = [{'label':i, 'value': i} for i in cars['country'].unique()]
 region = [{'label':i, 'value': i} for i in cars['region'].unique()]
-kunde = [{'label':i, 'value': i} for i in cars['customer'].unique()]
 
+table_header = [
+    html.Thead(html.Tr([html.Th("First Name"), html.Th("Last Name")]))
+]
 
+row1 = html.Tr([html.Td("Arthur"), html.Td("Dent")])
+row2 = html.Tr([html.Td("Ford"), html.Td("Prefect")])
+row3 = html.Tr([html.Td("Zaphod"), html.Td("Beeblebrox")])
+row4 = html.Tr([html.Td("Trillian"), html.Td("Astra")])
+
+table_body = [html.Tbody([row1, row2, row3, row4])]
+
+table = dbc.Table(table_header + table_body, bordered=True)
+
+table = dbc.Table(
+    # using the same table as in the above example
+    table_header + table_body,
+    bordered=True,
+    dark=True,
+    hover=True,
+    responsive=True,
+    striped=True,
+)
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
 server = app.server
@@ -72,14 +91,13 @@ app.layout = html.Div([
             id='carbuilds_graph'),
             width=8, lg={'size': 8,  "offset": 0, 'order': 'first'}
             ),
-        dbc.Col(d)
+        dbc.Col(dbc.Table(table)),
     ], justify='center')
 ])
 
-
 @app.callback(
     Output('carbuilds_graph', 'figure'),
-    Input('dropdown-region', 'value'))
+    Input('region-drop', 'value'))
 
 def update_graph(selected_region):
     region_filter = cars[cars['region'] == selected_region]
