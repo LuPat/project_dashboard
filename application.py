@@ -67,22 +67,18 @@ app.layout = html.Div([
             ))),
     dbc.Row([],style={'height': '1vh'}),
     dbc.Row([
-        dbc.Col(dcc.Dropdown(id='region-drop', placeholder='first dropdown',
+        dbc.Col(dcc.Dropdown(id='region-drop', placeholder='select region',
                              options=region, value='Europe'),
                              width={'size': 3}
                              ),
-        dbc.Col(dcc.Dropdown(id='country-drop', placeholder='second dropdown',
+        dbc.Col(dcc.Dropdown(id='country-drop', placeholder='select country',
                              options=country, value='Germany'),
                              width={'size': 3}
                              ),
-        dbc.Col(dcc.Dropdown(id='customer-drop', placeholder='third dropdown',
-                             options=customer, value=' '),
+        dbc.Col(dcc.Dropdown(id='plant-drop', placeholder='select plant',
+                             options=plant, value='Brussels'),
                              width={'size': 3}
-                             ),
-        dbc.Col(dcc.Dropdown(id='plant-drop', placeholder='fourth dropdown',
-                             options=plant, value='please select'),
-                             width={'size': 3}
-                             ),  
+                             ), 
     ], no_gutters=False
     ),
     dbc.Row([],style={'height': '1vh'}),
@@ -92,8 +88,10 @@ app.layout = html.Div([
             width=8, lg={'size': 8,  "offset": 0, 'order': 'first'}
             ),
         dbc.Col(dbc.Table(table)),
-    ], justify='center')
+    ], justify='around')
 ])
+
+
 
 @app.callback(
     Output('carbuilds_graph', 'figure'),
