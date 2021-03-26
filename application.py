@@ -76,7 +76,7 @@ app.layout = html.Div([
                              width={'size': 3}
                              ),
         dbc.Col(dcc.Dropdown(id='customer-drop', placeholder='third dropdown',
-                             options=plant, value=' '),
+                             options=customer, value=' '),
                              width={'size': 3}
                              ),
         dbc.Col(dcc.Dropdown(id='plant-drop', placeholder='fourth dropdown',
