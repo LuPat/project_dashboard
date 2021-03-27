@@ -22,7 +22,6 @@ from functions import clean_datetime
 # Import Data, set 'date' column to datetime and as index
 cars = pd.read_csv('./data/car_builds_long_format.csv', index_col=0, parse_dates=True)
 cars['date'] = pd.to_datetime(cars['date'])
-cars = clean_datetime(cars)
 
 # define variables with unique names for customer, plant, country and region
 customer = [{'label':i, 'value': i} for i in cars['customer'].unique()]
@@ -79,25 +78,41 @@ app.layout = html.Div(children=[
                     ]
             ))),
     dbc.Row([],style={'height': '1vh'}),
-    # dbc.Row([
-    #     dbc.Col(dcc.Dropdown(id='region-drop', placeholder='select region',
-    #                          options=region, value='Europe'),
-    #                          width={'size': 3}
-    #                          ),
-    #     dbc.Col(dcc.Dropdown(id='country-drop', placeholder='select country',
-    #                          options=[], value=''),
-    #                          width={'size': 3}
-    #                          ),
-    #     dbc.Col(dcc.Dropdown(id='customer', placeholder='select customer',
-    #                         options=customer, value=''),
-    #                         ),
-    #     dbc.Col(dcc.Dropdown(id='plant-drop', placeholder='select plant',
-    #                          options=plant, value=' '),
-    #                          width={'size': 3}
-    #                          ), 
-    # ], no_gutters=False
-    # ),
-    dbc.Row([],style={'height': '1vh'}),
+    dbc.Row([
+        dbc.Col(
+            dbc.Card([
+                dbc.CardHeader("That's your KPI"),
+                dbc.CardBody([
+                    ("DIsplay the KPI NUmber"),
+                ]),
+            ]),
+        ),
+        dbc.Col(
+            dbc.Card([
+                dbc.CardHeader("That's your KPI 2"),
+                dbc.CardBody([
+                    ("DIsplay the KPI NUmber"),
+                ]),
+            ]),
+        ),
+        dbc.Col(
+            dbc.Card([
+                dbc.CardHeader("That's your KPI3"),
+                dbc.CardBody([
+                    ("DIsplay the KPI NUmber"),
+                ]),
+            ]),
+        ),
+        dbc.Col(
+            dbc.Card([
+                dbc.CardHeader("That's your KPI4"),
+                dbc.CardBody([
+                    ("DIsplay the KPI NUmber"),
+                ]),
+            ],
+        )),
+    ]),               
+    
     html.Div(children=[
     dbc.Row([
         dbc.Col(dcc.Graph(
@@ -119,10 +134,22 @@ app.layout = html.Div(children=[
 
 def update_graph(selected_customer):
     df = cars
-    customer_filter = df[df['customer'] == selected_customer]
-    line_fig = px.bar(customer_filter,
-                       x= "year", y = 'carbuilds',
-                       title=f'Customer :{selected_customer} Plant :')
+    df = df.groupby(['date']).sum().reset_index()
+    #customer_filter = df[df['customer'] == selected_customer]
+    line_fig = line_fig = px.bar(df, x='date', y='carbuilds', title='Time Series with Rangeslider')
+    line_fig.update_xaxes(rangeslider_visible=True)
+    line_fig.update_xaxes(
+        rangeslider_visible=True,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(count=6, label="6m", step="month", stepmode="backward"),
+                dict(count=1, label="YTD", step="year", stepmode="todate"),
+                dict(count=1, label="1y", step="year", stepmode="backward"),
+                dict(step="all")
+        ])
+    )
+)   
     return line_fig
 
 if __name__ == '__main__':
