@@ -29,33 +29,41 @@ customer = [{'label':i, 'value': i} for i in cars['customer'].unique()]
 plant = [{'label':i, 'value': i} for i in cars['plant'].unique()]
 country = [{'label':i, 'value': i} for i in cars['country'].unique()]
 region = [{'label':i, 'value': i} for i in cars['region'].unique()]
+df = px.data.gapminder()
 
-table_header = [
-    html.Thead(html.Tr([html.Th("First Name"), html.Th("Last Name")]))
-]
-
-row1 = html.Tr([html.Td("Arthur"), html.Td("Dent")])
-row2 = html.Tr([html.Td("Ford"), html.Td("Prefect")])
-row3 = html.Tr([html.Td("Zaphod"), html.Td("Beeblebrox")])
-row4 = html.Tr([html.Td("Trillian"), html.Td("Astra")])
-
-table_body = [html.Tbody([row1, row2, row3, row4])]
-
-table = dbc.Table(table_header + table_body, bordered=True)
-
-table = dbc.Table(
-    # using the same table as in the above example
-    table_header + table_body,
-    bordered=True,
-    dark=True,
-    hover=True,
-    responsive=True,
-    striped=True,
-)
-
+# activate the dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
 server = app.server
 
+# styles 
+
+card_main = dbc.Card(
+    [
+        dbc.CardImg(src="/assets/big_data.jpg", top=True, bottom=False,
+                    title="Image by https://unsplash.com/@ev", alt='Learn Dash Bootstrap Card Component'),
+        dbc.CardBody(
+            [
+                html.H4("Learn Dash with Charming Data", className="card-title"),
+                html.H6("Lesson 1:", className="card-subtitle"),
+                html.P(
+                    "Choose the year you would like to see on the bubble chart.",
+                    className="card-text",
+                ),
+                dcc.Dropdown(id='user_choice', options=[{'label': yr, "value": yr} for yr in df.year.unique()],
+                             value=2007, clearable=False, style={"color": "#000000"}),
+                # dbc.Button("Press me", color="primary"),
+                # dbc.CardLink("GirlsWhoCode", href="https://girlswhocode.com/", target="_blank"),
+            ]
+        ),
+    ],
+    color="dark",   # https://bootswatch.com/default/ for more card colors
+    inverse=True,   # change color of text (black or white)
+    outline=False,  # True = remove the block colors from the background and header
+)
+
+card_graph = dbc.Card(
+        dcc.Graph(id='my_bar', figure={}), body=True, color="secondary",
+)
 
 app.layout = html.Div([
     dbc.Row(
@@ -91,8 +99,11 @@ app.layout = html.Div([
             id='carbuilds_graph'),
             width=8, lg={'size': 8,  "offset": 0, 'order': 'first'}
             ),
-        dbc.Col(dbc.Table(table)),
-    ], justify='around')
+        dbc.Col(dbc.Card(children=[
+            card_main,
+            card_graph,
+    ]), width=4,),
+    ]),
 ])
 
 @app.callback(
