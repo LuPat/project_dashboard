@@ -14,3 +14,7 @@
 .divBorder{
     border: 12px solid rgb(68, 67, 67);
 }
+
+.divFrame{
+    border:12px solid black
+}
