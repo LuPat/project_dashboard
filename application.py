@@ -52,7 +52,7 @@ card_main = dbc.Card(
                 dbc.Button("Europe", id="eu_button", color="primary"),
                 dbc.Button("Midlle East / Africa", id="mea_button", color="primary"),
                 dcc.Dropdown(id='customer_choice', options=customer,
-                             value=' ', placeholder='select Customer', clearable=True, style={"color": "#000000"}),
+                             value='BMW', placeholder='select Customer', clearable=True, style={"color": "#000000"}),
                 dcc.Dropdown(id='plant_choice', options=plant,
                              value=2007, clearable=True, style={"color": "#000000"}),
                 # dbc.CardLink("GirlsWhoCode", href="https://girlswhocode.com/", target="_blank"),
@@ -114,14 +114,15 @@ app.layout = html.Div(children=[
 
 @app.callback(
     Output('carbuilds_graph', 'figure'),
-       Input('customer_choice', 'value'))
+    Input('customer_choice', 'value')
+    )
 
 def update_graph(selected_customer):
     df = cars
     customer_filter = df[df['customer'] == selected_customer]
     line_fig = px.bar(customer_filter,
                        x= "year", y = 'carbuilds',
-                       title=f'Region :{selected_customer}')
+                       title=f'Customer :{selected_customer} Plant :')
     return line_fig
 
 if __name__ == '__main__':
