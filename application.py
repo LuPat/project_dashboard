@@ -15,13 +15,14 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import plotly.graph_objs as go
 from dash.dependencies import Input, Output
+from functions import clean_datetime
 
 #pio.templates.default = 'plotly_dark'
 
 # Import Data, set 'date' column to datetime and as index
 cars = pd.read_csv('./data/car_builds_long_format.csv', index_col=0, parse_dates=True)
 cars['date'] = pd.to_datetime(cars['date'])
-cars.index = cars['date']
+cars = clean_datetime(cars)
 
 # define variables with unique names for customer, plant, country and region
 customer = [{'label':i, 'value': i} for i in cars['customer'].unique()]
@@ -72,11 +73,14 @@ app.layout = html.Div([
                              width={'size': 3}
                              ),
         dbc.Col(dcc.Dropdown(id='country-drop', placeholder='select country',
-                             options=country, value='Germany'),
+                             options=[], value=''),
                              width={'size': 3}
                              ),
+        dbc.Col(dcc.Dropdown(id='customer', placeholder='select customer',
+                            options=customer, value=''),
+                            ),
         dbc.Col(dcc.Dropdown(id='plant-drop', placeholder='select plant',
-                             options=plant, value='Brussels'),
+                             options=plant, value=' '),
                              width={'size': 3}
                              ), 
     ], no_gutters=False
@@ -91,17 +95,28 @@ app.layout = html.Div([
     ], justify='around')
 ])
 
+@app.callback(
+    Output('country-drop', 'options'),
+    Output('country-drop', 'value'),
+    Input('region-drop', 'value'))
+
+def update_dropdown(selected_region):
+    region_filter = cars[cars['region'] == selected_region]
+    country_options = [{'label': i, 'value': i} for i in
+                        cars['country'].unique()]
+    return country_options, country_options[0]['value']
 
 
 @app.callback(
     Output('carbuilds_graph', 'figure'),
+    Input('country-drop', 'value'),
     Input('region-drop', 'value'))
 
-def update_graph(selected_region):
+def update_graph(selected_region, selected_data):
     region_filter = cars[cars['region'] == selected_region]
     line_fig = px.bar(region_filter,
-                       x= "date", y = 'carbuilds',
-                       title=f'{selected_region}')
+                       x= "year", y = 'carbuilds',
+                       title=f'Region :{selected_region}')
     return line_fig
 
 if __name__ == '__main__':
