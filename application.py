@@ -39,7 +39,7 @@ server = app.server
 
 card_main = dbc.Card(
     [
-        dbc.CardImg(src="/assets/big_data.jpg", top=True, bottom=False,
+        dbc.CardImg(src="/assets/big_data.jpeg", top=True, bottom=False,
                     title="Image by https://unsplash.com/@ev", alt='Learn Dash Bootstrap Card Component'),
         dbc.CardBody(
             [
@@ -52,7 +52,7 @@ card_main = dbc.Card(
                 dbc.Button("Europe", id="eu_button", color="primary"),
                 dbc.Button("Midlle East / Africa", id="mea_button", color="primary"),
                 dcc.Dropdown(id='customer_choice', options=customer,
-                             value='Volkswagen', clearable=True, style={"color": "#000000"}),
+                             value=' ', placeholder='select Customer', clearable=True, style={"color": "#000000"}),
                 dcc.Dropdown(id='plant_choice', options=plant,
                              value=2007, clearable=True, style={"color": "#000000"}),
                 # dbc.CardLink("GirlsWhoCode", href="https://girlswhocode.com/", target="_blank"),
@@ -98,6 +98,7 @@ app.layout = html.Div(children=[
     # ], no_gutters=False
     # ),
     dbc.Row([],style={'height': '1vh'}),
+    html.Div(children=[
     dbc.Row([
         dbc.Col(dcc.Graph(
             id='carbuilds_graph'),
@@ -107,30 +108,20 @@ app.layout = html.Div(children=[
             card_main,
     ]), width=4,),
     ]),
+    ], className='divFrame')
 ], className='divBorder')
-
-@app.callback(
-    Output('country-drop', 'options'),
-    Output('country-drop', 'value'),
-    Input('region-drop', 'value'))
-
-def update_dropdown(selected_region):
-    region_filter = cars[cars['region'] == selected_region]
-    country_options = [{'label': i, 'value': i} for i in
-                        cars['country'].unique()]
-    return country_options, country_options[0]['value']
 
 
 @app.callback(
     Output('carbuilds_graph', 'figure'),
-    Input('country-drop', 'value'),
-    Input('region-drop', 'value'))
+       Input('customer_choice', 'value'))
 
-def update_graph(selected_region, selected_data):
-    region_filter = cars[cars['region'] == selected_region]
-    line_fig = px.bar(region_filter,
+def update_graph(selected_customer):
+    df = cars
+    customer_filter = df[df['customer'] == selected_customer]
+    line_fig = px.bar(customer_filter,
                        x= "year", y = 'carbuilds',
-                       title=f'Region :{selected_region}')
+                       title=f'Region :{selected_customer}')
     return line_fig
 
 if __name__ == '__main__':
