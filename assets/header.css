@@ -1,7 +1,8 @@
 .app-header {
-    height: 60px;
+    height: 80px;
     line-height: 60px;
     border-bottom: thin lightgrey solid;
+    
 }
 
 .app-header .app-header--title {
@@ -10,3 +11,6 @@
     text-align: center;
 }
 
+.divBorder{
+    border: 12px solid rgb(68, 67, 67);
+}

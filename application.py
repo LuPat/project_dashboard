@@ -43,29 +43,33 @@ card_main = dbc.Card(
                     title="Image by https://unsplash.com/@ev", alt='Learn Dash Bootstrap Card Component'),
         dbc.CardBody(
             [
-                html.H4("Learn Dash with Charming Data", className="card-title"),
-                html.H6("Lesson 1:", className="card-subtitle"),
+                # html.H4("Learn Dash with Charming Data", className="card-title"),
+                # html.H6("Please choose your options"),
                 html.P(
-                    "Choose the year you would like to see on the bubble chart.",
+                    "Please choose region and customer",
                     className="card-text",
                 ),
-                dcc.Dropdown(id='user_choice', options=[{'label': yr, "value": yr} for yr in df.year.unique()],
-                             value=2007, clearable=False, style={"color": "#000000"}),
-                # dbc.Button("Press me", color="primary"),
+                dbc.Button("Europe", id="eu_button", color="primary"),
+                dbc.Button("Midlle East / Africa", id="mea_button", color="primary"),
+                dcc.Dropdown(id='customer_choice', options=customer,
+                             value='Volkswagen', clearable=True, style={"color": "#000000"}),
+                dcc.Dropdown(id='plant_choice', options=plant,
+                             value=2007, clearable=True, style={"color": "#000000"}),
                 # dbc.CardLink("GirlsWhoCode", href="https://girlswhocode.com/", target="_blank"),
             ]
         ),
     ],
-    color="dark",   # https://bootswatch.com/default/ for more card colors
+    color="Primary",   # https://bootswatch.com/default/ for more card colors
     inverse=True,   # change color of text (black or white)
     outline=False,  # True = remove the block colors from the background and header
+    #body=True
 )
 
 card_graph = dbc.Card(
         dcc.Graph(id='my_bar', figure={}), body=True, color="secondary",
 )
 
-app.layout = html.Div([
+app.layout = html.Div(children=[
     dbc.Row(
         dbc.Col(
             html.Div(
@@ -75,36 +79,35 @@ app.layout = html.Div([
                     ]
             ))),
     dbc.Row([],style={'height': '1vh'}),
-    dbc.Row([
-        dbc.Col(dcc.Dropdown(id='region-drop', placeholder='select region',
-                             options=region, value='Europe'),
-                             width={'size': 3}
-                             ),
-        dbc.Col(dcc.Dropdown(id='country-drop', placeholder='select country',
-                             options=[], value=''),
-                             width={'size': 3}
-                             ),
-        dbc.Col(dcc.Dropdown(id='customer', placeholder='select customer',
-                            options=customer, value=''),
-                            ),
-        dbc.Col(dcc.Dropdown(id='plant-drop', placeholder='select plant',
-                             options=plant, value=' '),
-                             width={'size': 3}
-                             ), 
-    ], no_gutters=False
-    ),
+    # dbc.Row([
+    #     dbc.Col(dcc.Dropdown(id='region-drop', placeholder='select region',
+    #                          options=region, value='Europe'),
+    #                          width={'size': 3}
+    #                          ),
+    #     dbc.Col(dcc.Dropdown(id='country-drop', placeholder='select country',
+    #                          options=[], value=''),
+    #                          width={'size': 3}
+    #                          ),
+    #     dbc.Col(dcc.Dropdown(id='customer', placeholder='select customer',
+    #                         options=customer, value=''),
+    #                         ),
+    #     dbc.Col(dcc.Dropdown(id='plant-drop', placeholder='select plant',
+    #                          options=plant, value=' '),
+    #                          width={'size': 3}
+    #                          ), 
+    # ], no_gutters=False
+    # ),
     dbc.Row([],style={'height': '1vh'}),
     dbc.Row([
         dbc.Col(dcc.Graph(
             id='carbuilds_graph'),
             width=8, lg={'size': 8,  "offset": 0, 'order': 'first'}
-            ),
+            ), 
         dbc.Col(dbc.Card(children=[
             card_main,
-            card_graph,
     ]), width=4,),
     ]),
-])
+], className='divBorder')
 
 @app.callback(
     Output('country-drop', 'options'),
