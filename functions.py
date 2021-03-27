@@ -21,5 +21,23 @@ def cars_wide_to_long(data):
               value_name = 'carbuilds')
     return data
 
+def clean_datetime(data):
+    '''
+    clean datetime columns
+    '''
+    data['year'] = data['date'].dt.year
+    data['month'] = data['date'].dt.month_name()
+    move_date = data['date']
+    move_month = data['month']
+    move_year = data['year']
+    data.drop(labels=['month'], axis=1, inplace=True)
+    data.drop(labels=['date'], axis=1, inplace=True)
+    data.drop(labels=['year'], axis=1, inplace=True)
+    data.insert(0, 'month', move_month)
+    data.insert(0, 'year', move_year)
+    data.insert(0, 'date', move_date)
+    data.index = data['year']
+    return data
+
 # add if statement to avoid auto call of function after import
 # SEE YOUTUBE timeline‚
