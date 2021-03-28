@@ -42,8 +42,6 @@ card_main = dbc.Card(
                     title="Image by https://unsplash.com/@ev", alt='Learn Dash Bootstrap Card Component'),
         dbc.CardBody(
             [
-                # html.H4("Learn Dash with Charming Data", className="card-title"),
-                # html.H6("Please choose your options"),
                 html.H6(
                     "Please choose region and customer",
                     className="card-text",
@@ -54,11 +52,7 @@ card_main = dbc.Card(
                         options=region, value=[], id="checklist_region", inline=True
                     ),
                 ]),
-                #     'Europe', id='eu_button', value=region, color='primary'),
-                # dbc.Button('Middle East / Africa', id='mea', color='primary'),
-                # ], size='sm'),
-                # dbc.Button("Europe", id="eu_button", color="primary"),
-                # dbc.Button("Midlle East / Africa", id="mea_button", color="primary"),
+ 
                 dcc.Dropdown(id='customer_choice', options=customer,
                              value='BMW', placeholder='select Customer', clearable=True, style={"color": "#000000"}),
                 dcc.Dropdown(id='plant_choice', options=plant,
@@ -153,8 +147,7 @@ def update_dropdown(selected_region):
     )
 
 def update_graph(selected_customer, selected_data):
-    df = cars
-    df = df.groupby(['region', 'country', 'customer', 'date']).sum().reset_index()
+    df = cars.groupby(['region', 'country', 'customer', 'date']).sum().reset_index()
     customer_filter = df[df['customer'] == selected_customer]
     line_fig = line_fig = px.bar(customer_filter, x='date', y='carbuilds', title=f'Carbuilds in {selected_customer}')
     line_fig.update_xaxes(rangeslider_visible=True)
