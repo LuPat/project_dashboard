@@ -48,7 +48,7 @@ card_main = dbc.Card(
                     className="card-text",
                 ),
                 dcc.Dropdown(id='region_choice', options=region,
-                             value=None, placeholder='select Region', clearable=True, style={"color": "#000000"}),
+                             value='Europe', placeholder='select Region', clearable=True, style={"color": "#000000"}),
                 dcc.Dropdown(id='customer_choice', options= [],
                              value='', placeholder='select Customer', clearable=True, style={"color": "#000000"}),
                 dcc.Dropdown(id='plant_choice', options=[],
@@ -141,18 +141,31 @@ def update_customer(selected_region):
 @app.callback(
     Output('plant_choice', 'options'),
     #Output('plant_choice', 'values'),
-    #Input('customer_choice', 'options'),
-    Input('customer_choice', 'value')
+    Input('customer_choice', 'options'),
+    #Input('customer_choice', 'value')
 )
+
 def update_plant(selected_customer):
-    print(selected_customer)
-    if type(selected_customer) !=str:
-        val = selected_customer
-        print(val)
-        filter_customer = df[df['customer'] == val]
-        
-        #plant_options = [{'label': x, 'value': x} for x in sorted(filter_customer['plant'].unique())]
-    return filter_customer, #plant_options[0]['value'], 
+    #print(selected_customer)
+    print(f'List of Customer : {selected_customer}')
+    filter_customer = df[df['customer'] == selected_customer]
+    print(f'Filtered Customer : {filter_customer}')
+    print(filter_customer) 
+    plant_options = [{'label': x, 'value': x} for x in sorted(filter_customer['plant'].unique())]
+    return filter_customer, plant_options[0]['value'], 
+
+
+# def update_plant(selected_customer):
+#     #print(selected_customer)
+#     if type(selected_customer) !=str:
+#         val = selected_customer
+#         print(f'List of Customer : {val}')
+#         print(val.dtype)
+#         filter_customer = df[df['customer'] == val]
+#         print(f'Filtered Customer : {filter_customer}')
+#     print(filter_customer) 
+#     plant_options = [{'label': x, 'value': x} for x in sorted(filter_customer['plant'].unique())]
+#     return filter_customer, plant_options[0]['value'], 
 
 
 # select customer plant
