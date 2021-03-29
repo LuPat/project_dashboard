@@ -53,8 +53,7 @@ card_main = dbc.Card(
                              value='', placeholder='select Customer', clearable=True, style={"color": "#000000"}),
                 dcc.Dropdown(id='plant_choice', options=[],
                               value='', placeholder='select Customer Plant', clearable=True, style={"color": "#000000"}),
-                 #dbc.CardLink("GirlsWhoCode", href="https://girlswhocode.com/", target="_blank"),
-            ]
+            ],
         ),
     ],
     color="Primary",   # https://bootswatch.com/default/ for more card colors
@@ -133,75 +132,64 @@ app.layout = html.Div(children=[
 )
 
 def update_customer(selected_region):
+    #print(region)
+    print(f'Selected Region : {selected_region}')
     filter_region = df[df['region'] == selected_region]
     customer_options = [{'label': i, 'value': i} for i in sorted(filter_region['customer'].unique())]
-    #print(customer_options)
+    print(f'Customer Options : {customer_options}')
     return customer_options#, customer_options[0]['value']
 
 @app.callback(
     Output('plant_choice', 'options'),
     #Output('plant_choice', 'values'),
-    Input('customer_choice', 'options'),
-    #Input('customer_choice', 'value')
+    #Input('customer_choice', 'options'),
+    Input('customer_choice', 'value')
 )
 
 def update_plant(selected_customer):
     #print(selected_customer)
-    print(f'List of Customer : {selected_customer}')
+    #print(len(selected_customer))
+    print(f'Input Update Plant : {selected_customer}')
     filter_customer = df[df['customer'] == selected_customer]
-    print(f'Filtered Customer : {filter_customer}')
-    print(filter_customer) 
+    #print(f'Filtered Customer : {filter_customer}') 
     plant_options = [{'label': x, 'value': x} for x in sorted(filter_customer['plant'].unique())]
-    return filter_customer, plant_options[0]['value'], 
+    print(f'Filtered Plant : {plant_options}')
+    return plant_options #, plant_options[0]['value'], 
 
 
-# def update_plant(selected_customer):
-#     #print(selected_customer)
-#     if type(selected_customer) !=str:
-#         val = selected_customer
-#         print(f'List of Customer : {val}')
-#         print(val.dtype)
-#         filter_customer = df[df['customer'] == val]
-#         print(f'Filtered Customer : {filter_customer}')
-#     print(filter_customer) 
-#     plant_options = [{'label': x, 'value': x} for x in sorted(filter_customer['plant'].unique())]
-#     return filter_customer, plant_options[0]['value'], 
+#select customer plant
+@app.callback(
+    Output('carbuilds_graph', 'figure'),
+    Input('plant_choice', 'value'),
+    Input('customer_choice', 'value'),
+    #Input('region_choice', 'value)')
+)
 
-
-# select customer plant
-# @app.callback(
-#     Output('carbuilds_graph', 'figure'),
-#     Input('plant_choice', 'value')
-# )
-# def select_plant(selected_plant):
-#     select_plant = df[df.plant == selected_plant]
-#     return select_plant
-
-
-
-
-# def update_graph(selected_plant):
-#     df_graph = df[df.plant == selected_plant]
-#     line_fig = line_fig = px.bar(df_graph, x='date', y='carbuilds', title=f'Carbuilds in {selected_plant}')
-#     line_fig.update_xaxes(rangeslider_visible=True)
-#     line_fig.update_xaxes(
-#         rangeslider_visible=True,
-#         rangeselector=dict(
-#             buttons=list([
-#                 dict(count=1, label="1m", step="month", stepmode="backward"),
-#                 dict(count=6, label="6m", step="month", stepmode="backward"),
-#                 dict(count=1, label="YTD", step="year", stepmode="todate"),
-#                 dict(count=1, label="1y", step="year", stepmode="backward"),
-#                 dict(step="all")
-#         ])
-#     ))
-#     line_fig.update_layout(
-#         font_family='Courier New',
-#         font_color='Black',
-#         title_font_family='Times New Roman',
-#         legend_title_font_color="grey"
-#     )   
-#     return line_fig
+def update_graph(choosen_customer, choosen_plant):
+    print(f'Input plant filter : {choosen_customer} / {choosen_plant}')# / {choosen_region}')
+    df_plant = df[df.plant == choosen_plant]# or choosen_plant]
+    print(f'Selection for graph : {df_plant}')
+    line_fig = line_fig = px.bar(df_plant, x='date', y='carbuilds', title=f'Carbuilds in {choosen_plant}')
+    line_fig.update_xaxes(rangeslider_visible=True)
+    line_fig.update_xaxes(
+        rangeslider_visible=True,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(count=6, label="6m", step="month", stepmode="backward"),
+                dict(count=1, label="YTD", step="year", stepmode="todate"),
+                dict(count=1, label="1y", step="year", stepmode="backward"),
+                dict(step="all")
+        ])
+    ))
+    line_fig.update_layout(
+        font_family='Courier New',
+        font_color='Black',
+        title_font_family='Times New Roman',
+        legend_title_font_color="grey"
+    )   
+    return line_fig
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
