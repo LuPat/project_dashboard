@@ -28,9 +28,9 @@ cars['date'] = pd.to_datetime(cars['date'])
 df = cars.groupby(['region', 'country', 'customer', 'plant', 'date']).sum().reset_index()
 
 #---- create base data for data table
-df_table = cars[cars['region'] == 'Europe']
-df_table['year'] = df_table['date'].dt.year
-df_table = df_table.groupby(['region', 'year', 'date']).sum().reset_index()
+# df_table = cars[cars['region'] == 'Europe']
+# df_table['year'] = df_table['date'].dt.year
+# df_table = df_table.groupby(['region', 'year', 'date']).sum().reset_index()
 
 #---- define variables with unique names for customer, plant, country and region
 #---- may delete partly
@@ -77,11 +77,11 @@ card_graph = dbc.Card(
 )
 
 #---- create data for second bar chart 
-data_europe = df_table
-fig = px.bar(data_europe, x='year', y='carbuilds',
-             hover_data=['region', 'carbuilds'],
-             labels={'pop':'Carbuilds Europe 2010 - 2021'}, height=400,
-             title='Carbuilds Europe 2010 - 2021')
+# data_europe = cars
+# fig = px.bar(data_europe, x='year', y='carbuilds',
+#              hover_data=['region', 'carbuilds'],
+#              labels={'pop':'Carbuilds Europe 2010 - 2021'}, height=400,
+#              title='Carbuilds Europe 2010 - 2021')
 
 #---- main dash content body
 app.layout = html.Div(children=[
@@ -146,10 +146,11 @@ app.layout = html.Div(children=[
     #---- style third row with 2 columns for data table
     html.Div(children=[
         dbc.Row([
-            dbc.Col(dcc.Graph(
-            id='Builds per year',
-            figure = fig
-            ), width=4, lg={'size': 8,  "offset": 0, 'order': 'first'}
+            dbc.Col(
+                #dcc.Graph(
+            #id='Builds per year',
+            #figure = fig
+            # ), width=4, lg={'size': 8,  "offset": 0, 'order': 'first'}
             ),
         ], className='divFrame')
         ])
