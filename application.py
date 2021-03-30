@@ -1,8 +1,3 @@
-'''
-Author : Lutz Kinschert
-Dashboard to present carbuild numbers
-'''
-
 import numpy as np
 import pandas as pd
 import flask
@@ -17,31 +12,44 @@ import plotly.graph_objs as go
 from dash.dependencies import Input, Output
 from functions import clean_datetime
 
+'''
+Author : Lutz Kinschert
+Dashboard to present carbuild numbers
+'''
+#-----load general plotly template for graphs
 pio.templates.default = 'plotly'
 
-# Import Data, set 'date' column to datetime and as index
+
+#---- import data, set 'date' column to datetime and as index
 cars = pd.read_csv('./data/car_builds_long_format.csv', index_col=0, parse_dates=True)
 cars['date'] = pd.to_datetime(cars['date'])
+
+#---- groupby base dateset for barchart
 df = cars.groupby(['region', 'country', 'customer', 'plant', 'date']).sum().reset_index()
+
+#---- create base data for data table
 df_table = cars[cars['region'] == 'Europe']
 df_table['year'] = df_table['date'].dt.year
 df_table = df_table.groupby(['region', 'year', 'date']).sum().reset_index()
 
-# define variables with unique names for customer, plant, country and region
+#---- define variables with unique names for customer, plant, country and region
+#---- may delete partly
 customer_options = [{'label':i, 'value': i} for i in df['customer'].unique()]
 plant_options = [{'label':i, 'value': i} for i in df['plant'].unique()]
 country_options = [{'label':i, 'value': i} for i in df['country'].unique()]
 region_options = [{'label':i, 'value': i} for i in df['region'].unique()]
-#df = px.data.gapminder()
 
-# activate the dash app
+
+#---- activate the dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
 server = app.server
 
-# styles 
+#---- create style variables for main body 
 
+#---- card with picture and dropdown menu for main seletcion
 card_main = dbc.Card(
     [
+        
         dbc.CardImg(src="/assets/big_data.jpeg", top=True, bottom=False,
                     title="Image by https://unsplash.com/@ev", alt='Learn Dash Bootstrap Card Component'),
         dbc.CardBody(
@@ -63,17 +71,21 @@ card_main = dbc.Card(
     #body=True
 )
 
+#---- create card with graph inside 
 card_graph = dbc.Card(
         dcc.Graph(id='my_bar', figure={}), body=True, color="secondary",
 )
 
+#---- create data for second bar chart 
 data_europe = df_table
 fig = px.bar(data_europe, x='year', y='carbuilds',
              hover_data=['region', 'carbuilds'],
              labels={'pop':'Carbuilds Europe 2010 - 2021'}, height=400,
              title='Carbuilds Europe 2010 - 2021')
 
+#---- main dash content body
 app.layout = html.Div(children=[
+    #---- style header above main body
     dbc.Row(
         dbc.Col(
             html.Div(
@@ -83,6 +95,7 @@ app.layout = html.Div(children=[
                     ]
             ))),
     dbc.Row([],style={'height': '1vh'}),
+    #---- style first row with 4 columns for kpi information
     dbc.Row([
         dbc.Col(
             dbc.Card([
@@ -117,7 +130,7 @@ app.layout = html.Div(children=[
             ],
         )),
     ]),               
-    
+    #---- style second row with two columns for barchart and dropdown
     html.Div(children=[
     dbc.Row([
         dbc.Col(dcc.Graph(
@@ -130,6 +143,7 @@ app.layout = html.Div(children=[
     ]),
     ], className='divFrame'),
 
+    #---- style third row with 2 columns for data table
     html.Div(children=[
         dbc.Row([
             dbc.Col(dcc.Graph(
@@ -141,7 +155,7 @@ app.layout = html.Div(children=[
         ])
 ], className='divBorder')
 
-# region selection
+#---- callback to select region in dropdown
 @app.callback(
     Output(component_id ='customer_choice', component_property='options'),
     Output(component_id='customer_choice', component_property='value'),
@@ -156,6 +170,7 @@ def update_customer(selected_region):
     print(f'Customer Options : {customer_options}')
     return customer_options, customer_options[0]['value']
 
+#---- callback to select customer 
 @app.callback(
     Output('plant_choice', 'options'),
     Output('plant_choice', 'values'),
@@ -174,7 +189,7 @@ def update_plant(selected_customer):
     return plant_options, plant_options[0]['value'], 
 
 
-#select customer plant
+#---- final callback to select plant and function for graph data
 @app.callback(
     Output('carbuilds_graph', 'figure'),
     Input('plant_choice', 'value'),
@@ -183,8 +198,8 @@ def update_plant(selected_customer):
 )
 
 def update_graph(choosen_plant):
-    print(f'Input plant filter : {choosen_plant}')# / {choosen_region}')
-    df_plant = df[df.plant == choosen_plant]# or choosen_plant]
+    print(f'Input plant filter : {choosen_plant}')
+    df_plant = df[df.plant == choosen_plant]
     print(f'Selection for graph : {df_plant}')
     line_fig = line_fig = px.bar(df_plant, x='date', y='carbuilds', title=f'Carbuilds in {choosen_plant}')
     line_fig.update_xaxes(rangeslider_visible=True)
