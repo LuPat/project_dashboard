@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import datetime as dt
 import flask
 import dash
 import dash_table
@@ -23,13 +24,13 @@ pio.templates.default = 'plotly'
 #---- import data, set 'date' column to datetime and as index
 cars = pd.read_csv('./data/car_builds_long_format.csv', index_col=0, parse_dates=True)
 cars['date'] = pd.to_datetime(cars['date'])
+cars['year'] = cars['date'].dt.year
 
 #---- groupby base dateset for barchart
 df = cars.groupby(['region', 'country', 'customer', 'plant', 'date']).sum().reset_index()
 
 #---- data for data table
 df_table = cars
-df_table['date'] = pd.to_datetime(df_table['date']).dt.year
 df_grouped = df_table.groupby(['customer', 'plant', 'date']).sum().reset_index()
 
 #---- create base data for data table
@@ -229,7 +230,8 @@ def update_graph(choosen_plant):
         font_family='Courier New',
         font_color='Black',
         title_font_family='Times New Roman',
-        legend_title_font_color="grey"
+        legend_title_font_color="grey",
+        #xaxis_range=['2010-01-01', '2021-02-28']
     )   
     return line_fig
 
