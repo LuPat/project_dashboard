@@ -48,7 +48,6 @@ region_options = [{'label':i, 'value': i} for i in df['region'].unique()]
 
 #---- activate the dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
-app.set("port", PORT)
 server = app.server
 
 #---- create style variables for main body 
@@ -238,4 +237,5 @@ def update_graph(choosen_plant):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+    #app.set("port", PORT)
 
