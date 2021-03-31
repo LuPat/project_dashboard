@@ -7,3 +7,4 @@ Flask==1.1.2
 dash_core_components==1.15.0
 pandas==1.2.2
 dash_table==4.11.2
+gunicorn
