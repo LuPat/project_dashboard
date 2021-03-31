@@ -47,7 +47,7 @@ region_options = [{'label':i, 'value': i} for i in df['region'].unique()]
 
 
 #---- activate the dash app
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE]) #suppress_callback_exceptions=True
 server = app.server
 
 #---- create style variables for main body 
