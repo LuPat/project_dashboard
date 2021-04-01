@@ -19,7 +19,7 @@ Dashboard to present carbuild numbers
 '''
 #-----load general plotly template for graphs
 pio.templates.default = 'plotly'
-
+PLOTLY_LOGO = "https://images.plot.ly/logo/new-branding/plotly-logomark.png"
 
 #---- import data, set 'date' column to datetime and as index
 cars = pd.read_csv('./data/car_builds_long_format.csv', index_col=0, parse_dates=True)
@@ -60,18 +60,49 @@ region_options = [{'label':i, 'value': i} for i in df['region'].unique()]
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE]) #suppress_callback_exceptions=True
 server = app.server
 
-#---- create style variables for main body 
+#---- create nav bar for body 
+navbar = dbc.Navbar(
+    [
+        html.A(
+            # Use row and col to control vertical alignment of logo / brand
+            dbc.Row(
+                [
+                    dbc.Col(html.Img(src=PLOTLY_LOGO, height="30px")),
+                    dbc.Col(dbc.NavbarBrand("Navbar", className="ml-2")),
+                ],
+                align="center",
+                no_gutters=True,
+            ),
+            href="https://plot.ly",
+        ),
+        dbc.NavbarToggler(id="navbar-toggler"),
+    ],
+    color="dark",
+    dark=True,
+)
+
 
 #---- card with picture and dropdown menu for main seletcion
 card_main = dbc.Card(
     [
-        
+        dbc.CardHeader(
+            dbc.Tabs(
+                [
+                    dbc.Tab(label="EMEA", tab_id="tab-1"),
+                    dbc.Tab(label="Global", tab_id="tab-2"),
+                ],
+                id="card-tabs",
+                card=True,
+                active_tab="tab-1",
+            )
+        ),
         dbc.CardImg(src="/assets/big_data.jpeg", top=True, bottom=False,
                     title="Image by https://unsplash.com/@ev", alt='Learn Dash Bootstrap Card Component'),
         dbc.CardBody(
             [
                 html.H6(
                     "Please choose region and customer",
+                    id="card-content",
                     className="card-text",
                 ),
                 dcc.Dropdown(id='region_choice', options=region_options,
@@ -151,13 +182,17 @@ app.layout = html.Div(children=[
                     ]
             ))),
     dbc.Row([],style={'height': '1vh'}),
+
+    #---- navbar
+    dbc.Row(navbar),
     #---- style first row with 4 columns for kpi information
     dbc.Row([
         dbc.Col(
             dbc.Card([
                 dbc.CardHeader('Builds Total Europe 2020'),
                 dbc.CardBody([
-                    html.H4("21.6MM cars"),
+                    # html.H4("21.6MM cars"),
+                    html.H4(dbc.Badge("21.6MM UNITS", color='light‚', className="btn btn-warning")),
                 ]),
             ]),
         ),
@@ -165,7 +200,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("Builds Middle East/Africa 2021"),
                 dbc.CardBody([
-                    html.H4("2.4MM cars"),
+                    html.H4(dbc.Badge("2.4MM UNITS", color='light‚', className="btn btn-info")),
                 ]),
             ]),
         ),
@@ -173,7 +208,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("That's your KPI3"),
                 dbc.CardBody([
-                    ("Display the KPI NUmber"),
+                    html.H4(dbc.Badge("Danger KPI", color='light‚', className="btn btn-danger")),
                 ]),
             ],),
         ),
@@ -181,7 +216,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("That's your KPI4"),
                 dbc.CardBody([
-                    ("Display the KPI NUmber"),
+                    html.H4(dbc.Badge("Succesful KPI", color='light‚', className="btn btn-success")),
                 ]),
             ],
         )),
@@ -216,6 +251,14 @@ app.layout = html.Div(children=[
         # ]), 
         ], className='divFrame')
 ], className='divBorder')
+
+
+#---- callback for tabs in cards
+@app.callback(
+    Output("card-content", "children"), [Input("card-tabs", "active_tab")]
+)
+def tab_content(active_tab):
+    return "This is tab {}".format(active_tab)
 
 #---- callback to select region in dropdown
 @app.callback(
