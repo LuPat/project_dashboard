@@ -76,6 +76,9 @@ navbar = dbc.Navbar(
             href="https://plot.ly",
         ),
         dbc.NavbarToggler(id="navbar-toggler"),
+        dbc.NavItem(dbc.NavLink('Page 1', href='#')),
+        dbc.NavItem(dbc.NavLink('Page 2', href='#')),
+        
     ],
     color="dark",
     dark=True,
@@ -306,7 +309,7 @@ def update_graph(choosen_plant):
     print(f'Input plant filter : {choosen_plant}')
     df_plant = df[df.plant == choosen_plant]
     print(f'Selection for graph : {df_plant}')
-    line_fig = line_fig = px.bar(df_plant, x='date', y='carbuilds', title=f'Carbuilds in {choosen_plant}')
+    line_fig = line_fig = px.bar(df_plant, x='date', y='carbuilds', title=f'Carbuilds @ plant : {choosen_plant}')
     line_fig.update_xaxes(rangeslider_visible=True)
     line_fig.update_xaxes(
         rangeslider_visible=True,
