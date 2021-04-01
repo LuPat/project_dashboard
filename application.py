@@ -163,9 +163,6 @@ card_table = dash_table.DataTable(
         }
         )
 
-
-
-
 #---- create data for second bar chart 
 # data_europe = cars
 # fig = px.bar(data_europe, x='year', y='carbuilds',
