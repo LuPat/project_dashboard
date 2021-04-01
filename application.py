@@ -29,6 +29,16 @@ cars['year'] = cars['date'].dt.year
 #---- groupby base dateset for barchart
 df = cars.groupby(['region', 'country', 'customer', 'plant', 'date']).sum().reset_index()
 
+#---- data processing pie charts
+cars_2020 = cars[(cars['year'] == 2020)]#.reset_index()
+cars_europe = cars_2020[(cars_2020['region'] == 'Europe')]
+cars_europe = cars_europe.groupby('customer').sum().sort_values('carbuilds', ascending=False).head(5).reset_index()
+fig_pie1 = px.pie(cars_europe, values='carbuilds', names='customer', title='Share Europe')
+
+cars_mea = cars_2020[(cars_2020['region'] == 'Middle East/Africa')]
+cars_mea = cars_mea.groupby('customer').sum().sort_values('carbuilds', ascending=False).head(5).reset_index()
+fig_pie2 = px.pie(cars_mea, values='carbuilds', names='customer', title='Share Middle East/Africa')
+
 #---- data for data table
 df_table = cars
 df_grouped = df_table.groupby(['customer', 'plant', 'date']).sum().reset_index()
@@ -82,6 +92,46 @@ card_graph = dbc.Card(
         dcc.Graph(id='my_bar', figure={}), body=True, color="secondary",
 )
 
+ 
+card_table = dash_table.DataTable(
+            id='datatable-interactivity',
+            columns=[
+                {"name": i, "id": i, "deletable": True, "selectable": True, "hideable": True}
+                if i == "iso_alpha3" or i == "year" or i == "id"
+                else {"name": i, "id": i, "deletable": True, "selectable": True}
+                for i in df_table.columns
+        ],
+        data=df_table.to_dict('records'),  # the contents of the table
+        editable=True,              # allow editing of data inside all cells
+        filter_action="native",     # allow filtering of data by user ('native') or not ('none')
+        sort_action="native",       # enables data to be sorted per-column by user or not ('none')
+        sort_mode="single",         # sort across 'multi' or 'single' columns
+        column_selectable="multi",  # allow users to select 'multi' or 'single' columns
+        row_selectable="multi",     # allow users to select 'multi' or 'single' rows
+        row_deletable=True,         # choose if user can delete a row (True) or not (False)
+        selected_columns=[],        # ids of columns that user selects
+        selected_rows=[],           # indices of rows that user selects
+        page_action="native",       # all data is passed to the table up-front or not ('none')
+        page_current=0,             # page number that user is on
+        page_size=6,                # number of rows visible per page
+        style_cell={                # ensure adequate header width when text is shorter than cell's text
+            'minWidth': 95, 'maxWidth': 95, 'width': 95
+        },
+        style_cell_conditional=[    # align text columns to left. By default they are aligned to right
+            {
+                'if': {'column_id': c},
+                'textAlign': 'left'
+            } for c in ['country', 'iso_alpha3']
+        ],
+        style_data={                # overflow cells' content into multiple lines
+            'whiteSpace': 'normal',
+            'height': 'auto'
+        }
+        )
+
+
+
+
 #---- create data for second bar chart 
 # data_europe = cars
 # fig = px.bar(data_europe, x='year', y='carbuilds',
@@ -107,7 +157,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader('Builds Total Europe 2020'),
                 dbc.CardBody([
-                    html.H4("21.6MM units"),
+                    html.H4("21.6MM cars"),
                 ]),
             ]),
         ),
@@ -115,7 +165,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("Builds Middle East/Africa 2021"),
                 dbc.CardBody([
-                    html.H4("2.4MM units"),
+                    html.H4("2.4MM cars"),
                 ]),
             ]),
         ),
@@ -123,7 +173,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("That's your KPI3"),
                 dbc.CardBody([
-                    ("DIsplay the KPI NUmber"),
+                    ("Display the KPI NUmber"),
                 ]),
             ],),
         ),
@@ -131,7 +181,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("That's your KPI4"),
                 dbc.CardBody([
-                    ("DIsplay the KPI NUmber"),
+                    ("Display the KPI NUmber"),
                 ]),
             ],
         )),
@@ -151,20 +201,20 @@ app.layout = html.Div(children=[
 
     #---- style third row with 2 columns for data table
     html.Div(children=[
-        dbc.Row([
-            dbc.Col(
-                dash_table.DataTable(
-                    id='table',
-                    columns=[{"name": i, "id": i}
-                        for i in df_grouped.columns],
-                        data=df_grouped.to_dict('records'),
-                        style_cell=dict(textAlign='left'),
-                        style_header=dict(backgroundColor="slategrey"),
-                        #style_data=dict(backgroundColor="lightcyan")
-    ), width=4, lg={'size': 8,  "offset": 0, 'order': 'first'}
-            ),
+        card_table
+        # dbc.Row([
+        #     dbc.Col(dcc.Graph(
+        #         id='pie_europe',
+        #         figure = fig_pie1
+        #     ), width=4, lg={'size': 8,  "offset": 0, 'order': 'first'}
+        #         ),
+        #     dbc.Col(dcc.Graph(
+        #         id='pie_mea',
+        #         figure = fig_pie2
+        #     ),width=4, lg={'size': 8,  "offset": 0, 'order': 'first'}
+        #     ),
+        # ]), 
         ], className='divFrame')
-        ])
 ], className='divBorder')
 
 #---- callback to select region in dropdown
