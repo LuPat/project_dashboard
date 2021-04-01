@@ -192,7 +192,7 @@ app.layout = html.Div(children=[
                 dbc.CardHeader('Builds Total Europe 2020'),
                 dbc.CardBody([
                     # html.H4("21.6MM cars"),
-                    html.H4(dbc.Badge("21.6MM UNITS", color='light‚', className="btn btn-warning")),
+                    html.H4(dbc.Badge("21.6MM UNITS", className="btn btn-info")),
                 ]),
             ]),
         ),
@@ -200,7 +200,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("Builds Middle East/Africa 2021"),
                 dbc.CardBody([
-                    html.H4(dbc.Badge("2.4MM UNITS", color='light‚', className="btn btn-info")),
+                    html.H4(dbc.Badge("2.4MM UNITS", className="btn btn-info")),
                 ]),
             ]),
         ),
@@ -208,7 +208,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("That's your KPI3"),
                 dbc.CardBody([
-                    html.H4(dbc.Badge("Danger KPI", color='light‚', className="btn btn-danger")),
+                    html.H4(dbc.Badge("Succesful KPI", className="btn btn-success")),
                 ]),
             ],),
         ),
@@ -216,7 +216,7 @@ app.layout = html.Div(children=[
             dbc.Card([
                 dbc.CardHeader("That's your KPI4"),
                 dbc.CardBody([
-                    html.H4(dbc.Badge("Succesful KPI", color='light‚', className="btn btn-success")),
+                    html.H4(dbc.Badge("Danger KPI", className="btn btn-danger")),
                 ]),
             ],
         )),
@@ -254,11 +254,11 @@ app.layout = html.Div(children=[
 
 
 #---- callback for tabs in cards
-@app.callback(
-    Output("card-content", "children"), [Input("card-tabs", "active_tab")]
-)
-def tab_content(active_tab):
-    return "This is tab {}".format(active_tab)
+# @app.callback(
+#     Output("card-content", "children"), [Input("card-tabs", "active_tab")]
+# )
+# def tab_content(active_tab):
+#     return "This is tab {}".format(active_tab)
 
 #---- callback to select region in dropdown
 @app.callback(
